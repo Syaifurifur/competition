@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "DM Sans", sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --color-ink: #07111f;
+  --color-electric: #b8ff2c;
+  --color-cyanpop: #38d9ff;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; min-width: 320px; background: #f5f6f2; color: #07111f; font-family: "DM Sans", sans-serif; }
+button, input, textarea, select { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+
+.font-display { font-family: "Space Grotesk", sans-serif; }
+.noise { position: relative; isolation: isolate; }
+.noise::after { content: ""; position: absolute; inset: 0; z-index: -1; opacity: .05; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E"); }
+.grid-lines { background-image: linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px); background-size: 48px 48px; }
+.clip-slant { clip-path: polygon(0 0, 100% 0, 92% 100%, 0 100%); }
+.shadow-brutal { box-shadow: 6px 6px 0 #07111f; }
+.card-hover { transition: transform .25s ease, box-shadow .25s ease; }
+.card-hover:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(7,17,31,.13); }
+.input { width:100%; border:1px solid #d8dcd3; border-radius:14px; background:#fff; padding:.8rem 1rem; outline:none; transition:.2s; }
+.input:focus { border-color:#07111f; box-shadow:0 0 0 3px rgba(184,255,44,.55); }
+.label { display:block; margin-bottom:.45rem; font-weight:700; font-size:.84rem; color:#27313e; }
+.btn-primary { display:inline-flex; align-items:center; justify-content:center; gap:.55rem; border:1px solid #07111f; border-radius:999px; background:#b8ff2c; color:#07111f; padding:.75rem 1.15rem; font-weight:800; cursor:pointer; transition:.2s; }
+.btn-primary:hover { background:#d2ff78; transform:translateY(-1px); }
+.btn-dark { display:inline-flex; align-items:center; justify-content:center; gap:.55rem; border-radius:999px; background:#07111f; color:white; padding:.8rem 1.2rem; font-weight:800; cursor:pointer; transition:.2s; }
+.btn-dark:hover { background:#16243a; }
+.btn-ghost { display:inline-flex; align-items:center; justify-content:center; gap:.45rem; border:1px solid #d7dbd1; border-radius:999px; background:white; padding:.7rem 1rem; font-weight:700; cursor:pointer; }
+.status { display:inline-flex; align-items:center; gap:.4rem; border-radius:999px; padding:.35rem .7rem; font-size:.75rem; font-weight:800; }
+label:has(> [name="school_code"]) { display:none; }
+::-webkit-scrollbar { width:10px; height:10px; }
+::-webkit-scrollbar-thumb { background:#aab1a4; border-radius:99px; border:3px solid #f5f6f2; }
