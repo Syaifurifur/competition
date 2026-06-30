@@ -83,7 +83,7 @@ class PublicController extends Controller
             ])->all() + [
                 'competition_id'=>$competition->id,
                 'user_id'=>$user->id,
-                'ticket_code'=>'NOVA-'.strtoupper(Str::random(8)),
+                'ticket_code'=>'KREASI-'.strtoupper(Str::random(8)),
                 'consent'=>true,
                 'status'=>'pending',
             ];
@@ -212,7 +212,7 @@ class PublicController extends Controller
             }
             $members = $data['members'] ?? [];
             unset($data['members'], $data['member_student_cards'], $data['member_photos']);
-            $data['ticket_code'] = 'NOVA-'.strtoupper(Str::random(8));
+            $data['ticket_code'] = 'KREASI-'.strtoupper(Str::random(8));
             $registration = Registration::create($data);
             if ($isTeam) {
                 foreach ($members as $index => $member) {

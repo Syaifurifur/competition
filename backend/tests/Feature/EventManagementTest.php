@@ -29,6 +29,22 @@ class EventManagementTest extends TestCase
         ]);
     }
 
+    public function test_validation_and_http_errors_are_returned_in_indonesian(): void
+    {
+        $this->postJson('/api/login', [])
+            ->assertUnprocessable()
+            ->assertJsonPath('errors.email.0', 'email wajib diisi.')
+            ->assertJsonPath('errors.password.0', 'kata sandi wajib diisi.');
+
+        $this->getJson('/api/competitions/lomba-yang-tidak-ada')
+            ->assertNotFound()
+            ->assertJsonPath('message', 'Data yang dicari tidak ditemukan.');
+
+        $this->getJson('/api/rute-yang-tidak-ada')
+            ->assertNotFound()
+            ->assertJsonPath('message', 'Halaman atau data yang dicari tidak ditemukan.');
+    }
+
     public function test_public_can_browse_and_submit_a_valid_registration(): void
     {
         Storage::fake('public');
@@ -49,6 +65,7 @@ class EventManagementTest extends TestCase
         ]);
 
         $response->assertCreated()->assertJsonStructure(['ticket_code']);
+        $this->assertStringStartsWith('KREASI-', $response->json('ticket_code'));
         $registration = Registration::first();
         $this->assertSame('Data Sangat Rahasia', $registration->mother_name);
         $this->assertNotSame('Data Sangat Rahasia', $registration->getRawOriginal('mother_name'));
@@ -62,7 +79,7 @@ class EventManagementTest extends TestCase
     {
         $competition = $this->competition();
         $registration = Registration::create([
-            'competition_id' => $competition->id, 'ticket_code' => 'NOVA-TEST1234',
+            'competition_id' => $competition->id, 'ticket_code' => 'KREASI-TEST1234',
             'full_name' => 'Peserta', 'whatsapp' => '081234567890', 'email' => 'p@test.id',
             'birth_place' => 'Jakarta', 'birth_date' => '2009-01-01', 'grade' => 'XI',
             'nisn' => '1234567890', 'mother_name' => 'Rahasia', 'school_name' => 'SMA Test',
@@ -393,7 +410,7 @@ class EventManagementTest extends TestCase
         $other=$competition->replicate();
         $other->title='Lomba Tanpa Pendaftar'; $other->slug='lomba-tanpa-pendaftar'; $other->save();
         Registration::create([
-            'competition_id'=>$competition->id,'ticket_code'=>'NOVA-FILTER01','full_name'=>'Peserta Filter',
+            'competition_id'=>$competition->id,'ticket_code'=>'KREASI-FILTER01','full_name'=>'Peserta Filter',
             'whatsapp'=>'081234567890','email'=>'filter@test.id','birth_place'=>'Jakarta','birth_date'=>'2009-01-01',
             'grade'=>'XI','nisn'=>'2234567890','mother_name'=>'Rahasia','school_name'=>'SMA Filter',
             'teacher_name'=>'Guru','teacher_contact'=>'081298765432','student_card_path'=>'a.pdf',
@@ -411,7 +428,7 @@ class EventManagementTest extends TestCase
     {
         $competition=$this->competition();
         $registration=Registration::create([
-            'competition_id'=>$competition->id,'ticket_code'=>'NOVA-EXCEL01','full_name'=>'Peserta Excel',
+            'competition_id'=>$competition->id,'ticket_code'=>'KREASI-EXCEL01','full_name'=>'Peserta Excel',
             'whatsapp'=>'081234567890','email'=>'excel@test.id','birth_place'=>'Jakarta','birth_date'=>'2009-01-01',
             'grade'=>'XI','nisn'=>'3234567890','mother_name'=>'Rahasia','school_name'=>'SMA Excel',
             'teacher_name'=>'Guru','teacher_contact'=>'081298765432','student_card_path'=>'a.pdf',
@@ -552,7 +569,7 @@ class EventManagementTest extends TestCase
         $competition=$this->competition();
         $user=User::create(['name'=>'Peserta','email'=>'peserta@test.id','password'=>'password123','role'=>'participant','api_token'=>hash('sha256','participant-token')]);
         $registration=Registration::create([
-            'user_id'=>$user->id,'competition_id'=>$competition->id,'ticket_code'=>'NOVA-PART1234','full_name'=>'Peserta','whatsapp'=>'081234567890','email'=>$user->email,
+            'user_id'=>$user->id,'competition_id'=>$competition->id,'ticket_code'=>'KREASI-PART1234','full_name'=>'Peserta','whatsapp'=>'081234567890','email'=>$user->email,
             'birth_place'=>'Jakarta','birth_date'=>'2009-01-01','grade'=>'XI','nisn'=>'1234567890','mother_name'=>'Rahasia','school_name'=>'SMA Test',
             'teacher_name'=>'Guru','teacher_contact'=>'081298765432','student_card_path'=>'a.pdf','delegation_letter_path'=>'b.pdf','photo_path'=>'c.png','consent'=>true,
         ]);
