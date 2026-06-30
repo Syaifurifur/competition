@@ -104,14 +104,18 @@ class EventManagementTest extends TestCase
         $payload = [
             'title'=>'Olimpiade Test Diperbarui','category'=>'Science Competition',
             'short_description'=>'Ringkasan telah diperbarui PIC.','description'=>'Deskripsi lengkap yang diperbarui PIC.',
-            'quota'=>120,'fee'=>50000,'location'=>'Makassar','poster_url'=>null,'requirements'=>[],
+            'quota'=>120,'fee'=>50000,'location'=>'Makassar','poster_url'=>null,
+            'whatsapp_group_url'=>'https://chat.whatsapp.com/AbCdEfGhIjKlMnOpQrStUv','requirements'=>[],
             'guides'=>[['title'=>'Panduan Peserta','content'=>'Peserta membawa kartu pelajar.']],
             'timeline'=>[['label'=>'Hari Kompetisi','type'=>'single','date'=>now()->addDays(20)->toDateString()]],
             'is_featured'=>false,'participation_type'=>'individual','team_size'=>1,'official_count'=>0,'pic_slots'=>1,
         ];
 
         $this->withToken('pic-editor-token')->putJson('/api/manage/competitions/'.$assigned->id, $payload)
-            ->assertOk()->assertJsonPath('title', 'Olimpiade Test Diperbarui')->assertJsonPath('quota', 120);
+            ->assertOk()->assertJsonPath('title', 'Olimpiade Test Diperbarui')->assertJsonPath('quota', 120)
+            ->assertJsonPath('whatsapp_group_url', 'https://chat.whatsapp.com/AbCdEfGhIjKlMnOpQrStUv');
+        $this->getJson('/api/competitions/'.$assigned->fresh()->slug)
+            ->assertOk()->assertJsonPath('whatsapp_group_url', 'https://chat.whatsapp.com/AbCdEfGhIjKlMnOpQrStUv');
         $this->withToken('pic-editor-token')->putJson('/api/manage/competitions/'.$other->id, $payload)
             ->assertForbidden();
         $this->withToken('pic-editor-token')->deleteJson('/api/manage/competitions/'.$assigned->id)
