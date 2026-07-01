@@ -655,8 +655,8 @@ class EventManagementTest extends TestCase
         $extras=[
             'activity_title'=>'Kegiatan Terdahulu','activity_description'=>'Dokumentasi kegiatan Kreasi UNM.',
             'activity_interval'=>6,'activity_slides'=>[
-                ['image_url'=>'https://example.com/activity-1.jpg','alt_text'=>'Pembukaan kegiatan','instagram_url'=>'https://www.instagram.com/p/example1/'],
-                ['image_url'=>'https://example.com/activity-2.jpg','alt_text'=>'Final kompetisi','instagram_url'=>'https://instagram.com/p/example2/'],
+                ['image_url'=>'https://example.com/activity-1.jpg'],
+                ['image_url'=>'https://example.com/activity-2.jpg'],
             ],
             'sponsor_title'=>'Sponsor Kreasi UNM','sponsors'=>[
                 ['name'=>'Sponsor Satu','logo_url'=>'https://example.com/sponsor.png','website_url'=>'https://example.com'],
@@ -669,7 +669,8 @@ class EventManagementTest extends TestCase
         $this->withToken('admin-content-token')->postJson('/api/manage/content/landing-extras',$extras)
             ->assertOk()->assertJsonCount(2,'activity_slides')->assertJsonCount(1,'sponsors')->assertJsonCount(1,'media_partners');
         $this->getJson('/api/content/landing-extras')->assertOk()
-            ->assertJsonPath('activity_slides.0.instagram_url','https://www.instagram.com/p/example1/')
+            ->assertJsonPath('activity_slides.0.image_url','https://example.com/activity-1.jpg')
+            ->assertJsonMissingPath('activity_slides.0.instagram_url')
             ->assertJsonPath('sponsors.0.name','Sponsor Satu')->assertJsonPath('media_partners.0.name','Media Satu');
         $this->assertDatabaseHas('site_contents',['key'=>'landing_extras']);
 

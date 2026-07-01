@@ -52,6 +52,10 @@ Setiap perubahan fitur, skema database, API, hak akses, atau alur pengguna wajib
 
 ## Changelog
 
+### 2026-07-01
+
+- Menyederhanakan slider foto kegiatan menjadi hanya menggunakan link foto dan menghapus integrasi Instagram.
+
 ### 2026-06-27
 
 - Menambahkan jumlah slot PIC ketika membuat lomba dan pengaturan `PIC & Slot` ketika mengedit lomba.

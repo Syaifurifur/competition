@@ -69,7 +69,13 @@ class ContentController extends Controller
 
     public function landingExtras()
     {
-        return array_replace(self::DEFAULT_EXTRAS, SiteContent::where('key', self::EXTRAS_KEY)->value('content') ?? []);
+        $content = array_replace(self::DEFAULT_EXTRAS, SiteContent::where('key', self::EXTRAS_KEY)->value('content') ?? []);
+        $content['activity_slides'] = array_values(array_map(
+            fn ($slide) => ['image_url'=>$slide['image_url'] ?? ''],
+            $content['activity_slides'] ?? []
+        ));
+
+        return $content;
     }
 
     public function manageLandingExtras()
@@ -156,9 +162,7 @@ class ContentController extends Controller
         $data = $request->validate([
             'activity_title'=>'required|string|max:120', 'activity_description'=>'required|string|max:500',
             'activity_interval'=>'required|integer|min:2|max:30', 'activity_slides'=>'sometimes|array|max:12',
-            'activity_slides.*.image_url'=>'nullable|string|max:1000', 'activity_slides.*.alt_text'=>'required|string|max:150',
-            'activity_slides.*.instagram_url'=>['required','string','max:1000','regex:#^https://(www\.)?instagram\.com/#i'],
-            'activity_images'=>'nullable|array|max:12', 'activity_images.*'=>'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'activity_slides.*.image_url'=>['required','string','max:1000','regex:#^https?://#i'],
             'sponsor_title'=>'required|string|max:120', 'sponsors'=>'sometimes|array|max:20',
             'sponsors.*.name'=>'required|string|max:120', 'sponsors.*.logo_url'=>'nullable|string|max:1000',
             'sponsors.*.website_url'=>['nullable','string','max:1000','regex:#^https?://#i'],
@@ -171,14 +175,7 @@ class ContentController extends Controller
 
         $activities = [];
         foreach ($data['activity_slides'] ?? [] as $index => $slide) {
-            $imageUrl = $slide['image_url'] ?? null;
-            if ($request->hasFile("activity_images.$index")) {
-                $imageUrl = '/storage/'.$request->file("activity_images.$index")->store('site-content/activities', 'public');
-            }
-            if (!$imageUrl || !preg_match('#^(/|https?://)#', $imageUrl)) {
-                throw ValidationException::withMessages(["activity_slides.$index.image_url"=>'Pilih file atau masukkan URL foto kegiatan yang valid.']);
-            }
-            $activities[] = array_merge($slide, ['image_url'=>$imageUrl]);
+            $activities[] = ['image_url'=>$slide['image_url']];
         }
 
         $sponsors = [];
