@@ -12,7 +12,7 @@ use Illuminate\Validation\Rule;
 class ParticipantController extends Controller
 {
     private array $relations = [
-        'competition:id,title,slug,category,event_date,participation_type,team_size,official_count,fee,submission_start_at,submission_end_at,team_update_deadline_at,document_upload_deadline_at,downloadable_documents',
+        'competition:id,title,slug,category,event_date,participation_type,team_size,official_count,fee,bank_name,bank_account_number,bank_account_holder,payment_note,submission_start_at,submission_end_at,team_update_deadline_at,document_upload_deadline_at,downloadable_documents',
         'members',
         'officials',
     ];

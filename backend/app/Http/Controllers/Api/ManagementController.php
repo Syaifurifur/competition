@@ -107,6 +107,10 @@ class ManagementController extends Controller
         $data = $request->validate([
             'title'=>'required|string|max:180','category'=>'required|in:Sport Competition,Talent Competition,Science Competition','short_description'=>'required|string|max:300',
             'description'=>'required|string','quota'=>'required|integer|min:1','fee'=>'required|numeric|min:0',
+            'bank_name'=>'nullable|string|max:120',
+            'bank_account_number'=>'nullable|string|max:80',
+            'bank_account_holder'=>'nullable|string|max:180',
+            'payment_note'=>'nullable|string|max:500',
             'location'=>'required|string|max:180',
             'team_update_deadline_at'=>'nullable|date',
             'document_upload_deadline_at'=>'nullable|date',
